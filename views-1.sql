@@ -1,16 +1,26 @@
-CREATE VIEW invoice_with_balance AS 
-SELECT
-		invoice_id,
-		number,
-        client_id,
-        invoice_total,
-        payment_total,
-        invoice_total - payment_total AS Balance,
-        invoice_date,
-        due_date,
-        payment_date
-FROM invoices           
-WHERE (invoice_total - payment_total)  > 0;
+-- WE USE DELIMITER TO TELL THE MYSQL CLIENT TO TREAT THE STATEMENT AS AN ENTIRE STATEMENT  
 
-DELETE FROM invoice_with_balance
-WHERE invoice_id = 1 
+
+DELIMITER $$
+CREATE PROCEDURE get_clients ()
+BEGIN 
+SELECT * FROM clients ;
+END $$
+
+DELIMITER ;	
+
+
+-- FOR CALLING STORED PROCEDURE
+-- CALL get_clients()
+
+DELIMITER $$
+CREATE PROCEDURE get_invoices_with_balance()
+BEGIN 
+SELECT * 
+FROM invoices 
+WHERE (invoice_total - payment_total) > 0 ;
+END $$
+DELIMITER ;
+
+-- To DROP A PROCEDURE 
+-- DROP PROCEDURE IF EXISTS get_payments;
