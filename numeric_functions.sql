@@ -1,0 +1,1 @@
+SELECT round(5.2),CEIL(5.2),FLOOR(5.2),RAND(),ABS(-5.2)
