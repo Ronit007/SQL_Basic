@@ -1,17 +1,23 @@
-DELIMITER $$
+-- DROP TRIGGER IF EXISTS payments_after_delete ; 
 
-CREATE TRIGGER delete_after_payment
+DELIMITER $$
+CREATE TRIGGER payments_after_delete
 	 AFTER DELETE ON payments 
 	 FOR EACH ROW 
  BEGIN 
 		UPDATE invoices
 		SET payment_total = payment_total - OLD.amount
 		WHERE invoice_id = OLD.invoice_id;
+
+		INSERT INTO payments_audit
+        VALUES(OLD.client_id,OLD.date,OLD.amount,"Delete",NOW());
  END $$
  
  DELIMITER ;
  
- DELETE 
- FROM payments
- WHERE inovice_id = 10
+DELETE 
+FROM payments
+WHERE payment_id = 12
+ 
+
  
